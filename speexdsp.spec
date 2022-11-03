@@ -4,7 +4,7 @@
 #
 Name     : speexdsp
 Version  : 1.2.1
-Release  : 24
+Release  : 25
 URL      : https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-1.2.1.tar.gz
 Source0  : https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-1.2.1.tar.gz
 Summary  : An open-source, patent-free speech codec
@@ -99,15 +99,15 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656515370
+export SOURCE_DATE_EPOCH=1667439200
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition -mprefer-vector-width=256 "
-export FCFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition -mprefer-vector-width=256 "
-export FFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition -mprefer-vector-width=256 "
-export CXXFLAGS="$CXXFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition -mprefer-vector-width=256 "
+export CFLAGS="$CFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -Ofast -falign-functions=32 -ffat-lto-objects -flto=auto -fno-semantic-interposition "
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -132,10 +132,10 @@ make  %{?_smp_mflags}
 popd
 unset PKG_CONFIG_PATH
 pushd ../buildavx512/
-export CFLAGS="$CFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256 -Wl,-z,x86-64-v4"
-export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256 -Wl,-z,x86-64-v4"
-export FFLAGS="$FFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
-export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=512 -Wl,-z,x86-64-v4 -mtune=sapphirerapids "
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=512 -Wl,-z,x86-64-v4 -mtune=sapphirerapids "
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=512"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=512"
 export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v4"
 %configure --disable-static
 make  %{?_smp_mflags}
@@ -154,10 +154,10 @@ cd ../buildavx512;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1656515370
+export SOURCE_DATE_EPOCH=1667439200
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/speexdsp
-cp %{_builddir}/speexdsp-1.2.1/COPYING %{buildroot}/usr/share/package-licenses/speexdsp/fc3b9b42abbb2f2b795ad9598708f3db0b3e9ae7
+cp %{_builddir}/speexdsp-%{version}/COPYING %{buildroot}/usr/share/package-licenses/speexdsp/fc3b9b42abbb2f2b795ad9598708f3db0b3e9ae7 || :
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
